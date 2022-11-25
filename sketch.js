@@ -10,5 +10,8 @@ function setup()
 
 function loadMusic()
 {
-    musicfile.play();
+    musicfile.play(); //
 }
+
+function draw()
+{}
