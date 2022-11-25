@@ -1,13 +1,13 @@
-var musicfile;
-var button;
-
+let musicfile;
+let button;
 function setup()
 {
+    createCanvas(640, 480);
     soundFormats('mp3','ogg');
-    musicfile = loadSound('christmas', loaded);
-    button = createButton('play');
+    musicfile = loadSound('christmas.mp3', loaded);
+    button = createButton("play");
     button.mousePressed(togglePlaying);
-    background(50);
+    
 
 }
 
@@ -15,19 +15,22 @@ function togglePlaying()
 {
     if(!musicfile.isPlaying()){
         musicfile.play();
-        musicfile.setVolume(0.3);
         button.html('pause');
+    }else{
+        musicfile.stop();
+        button.html('play');
     }
-
-    else{musicfile.stop();
-    button.html('play');}
-
 }
 
 function loaded()
 {
-    musicfile.play();
-    console.log('loaded');
+    //musicfile.play();
+    console.log("It's working");
+}
+
+function draw(){
+    fill(255,0,0);
+    ellipse(50,50,100,100);
 }
 
 
