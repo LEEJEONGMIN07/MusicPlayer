@@ -1,6 +1,7 @@
 let musicfile;
 let musicfile2;
 let music;
+let jump;
 
 let img;
 let img2; 
@@ -8,12 +9,14 @@ let img2;
 let button;
 let button2;
 let jumpButton;
-let reverseButton;
+let ratebutton;
 
 var sliderVol;
 var sliderRate;
 
 var amp;
+
+var t = 0;
 
 function preload()
 {   
@@ -48,18 +51,16 @@ function setup()
     button2.position(65,490);
     
     //위치조절버튼
-    jumpButton = createButton('jump');
+    jumpButton = createButton('jump1');
     jumpButton.mousePressed(jumpSong);
+    jump = 1;
     jumpButton.position(140,490);
-    
-    //역재생버튼
-    reverseButton = createButton('reverse');
-    reverseButton.mousePressed(reverseSong);
-    reverseButton.position(200,490);
      
     //속도조절슬라이드
+    ratebutton = createButton('rate');
+    ratebutton.position(10,520);
     sliderRate = createSlider(0.5, 2.5, 1, 0.1);
-    sliderRate.position(20, 520);
+    sliderRate.position(50, 520);
     
     //볼륨조절슬라이더
     sliderVol = createSlider(0, 1, 1, 0.01);
@@ -81,45 +82,56 @@ function changeText2(val) {
     text(val, 200, 170);
 }
 
-function jumpSong() {  
-    var len = musicfile.currentTime();
-    var len2 = musicfile2.currentTime();
-    musicfile.jump(len + 10);
-    musicfile2.jump(len2 + 10);
-}
+function mousePressed() {
+    t = musicfile.duration()/5*jump;
+    t2 = musicfile2.duration()/5*jump;
     
-
-function reverseSong() {
-    musicfile.reverseBuffer();
-    musicfile2.reverseBuffer();
 }
 
+function jumpSong() {  
+    musicfile.jump(t);
+    musicfile2.jump(t2);
+
+    if(jump === 1){        
+        jump = 2;        
+        jumpButton.html('jump2');    
+    }else if(jump === 2){        
+        jump = 3;        
+        jumpButton.html('jump3');    
+    }else if(jump === 3){        
+        jump = 4;        
+        jumpButton.html('jump4');    
+    }else if(jump === 4){        
+        jump = 5;        
+        jumpButton.html('jump5');    
+    }else{        
+        jump = 1;        
+        jumpButton.html('jump1');    
+    }      
+}
 
 function draw(){
- 
-    fill(255);  
-    ellipse(musicfile.currentTime()*10, 
-    480-amp.getLevel()*1000,20,20);  
-
-    fill(60,255,255);
     let level = amp.getLevel();
     let size = map(level, 0, 1, 0, 200);
-    ellipse(100, 100, size, size);
+    fill(255);  
+    ellipse(musicfile.currentTime()*10, 
+    480-amp.getLevel()*1000,size,size);  
 
-    var vol = amp.getLevel();
-    var diam = map(vol, 0, 0.3, 10, 255);
+    //fill(60,255,255);
+    //ellipse(100, 100, size, size);
+    
+    var diam = map(level, 0, 0.3, 10, 255);
     
     musicfile.setVolume(sliderVol.value());
     musicfile2.setVolume(sliderVol.value());
     fill(255);
     textSize(15);
-    text('vol', 160, 30);
+    text('volume', 175, 30);
 
     musicfile.rate(sliderRate.value());
     musicfile2.rate(sliderRate.value());
 
 }
-
 
 function togglePlaying1(){    
     if(music == 1){        
@@ -154,16 +166,9 @@ function togglePlaying2(){
             music = 1;        
             button2.html('Music1');    
         }    
-        console.log(music); 
     }
 
 function loaded()
 {
     console.log("It's working");
-
 }
-
-
-
-
-
